@@ -83,6 +83,10 @@ class App extends Component {
           <td><input type="button" onClick={this.handleRemoveRow.bind(this, addcurr)} value="(-)"/></td>
         </tr>
       );
+      this.state.tables.push(<table className="ListTable"><tbody>{children}</tbody></table>);
+      this.setState({
+        tables: this.state.tables
+      });
     /*
      let r = "<tr id=" + addcurr +"><td>";
      r += addcurr;
@@ -163,7 +167,7 @@ class App extends Component {
               <tbody>
                 <tr>
                   <td colSpan="2">
-                    {this.state.tables[1]}
+                    {this.state.tables}
                     <table className="ListTable" id="mytable">
                       <tbody>
                       </tbody>
