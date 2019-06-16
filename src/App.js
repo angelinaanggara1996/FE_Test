@@ -9,8 +9,8 @@ class App extends Component {
       isLoaded: false,
       rates: {},
       currencies: {},
+      tables: [],
       value: "10.0000"
-      
     };
   }
 
@@ -49,7 +49,60 @@ class App extends Component {
     );
   }
 
-  handleAddRow = () => {
+  addNewRow = () => {
+    let addcurr = document.getElementById("addCurrency").value.trim().toUpperCase();
+    if (addcurr === ""){
+      alert("please input new currency value");
+    } else {
+      var tbl = document.getElementById(addcurr);
+      if(tbl){
+        alert(addcurr + " already exists in the table");
+      } else {
+        this.createNewRow(addcurr);
+      }
+    }
+  };
+
+  createNewRow = (addcurr) => {
+    const mystate = this.state;
+    let ratesArr = Object.keys(mystate).map(i => mystate[i])[2];
+    let currencyKey = Object.keys(mystate).map(i => mystate[i])[3];
+    let children=[];
+    console.log(children);
+    if(ratesArr.hasOwnProperty(addcurr) && currencyKey.hasOwnProperty(addcurr)){
+      let exchangeRate = ratesArr[addcurr].toLocaleString(undefined, {maximumFractionDigits:2, minimumFractionDigits:2});
+      let exchangeVal = (this.state.value * ratesArr[addcurr]).toLocaleString(undefined, {maximumFractionDigits:2, minimumFractionDigits:2});
+      children.push(
+        <tr id={addcurr}>
+          <td>
+            {addcurr}<br></br>
+            <p id="desc">{addcurr}-{currencyKey[addcurr]}</p><br></br>
+            <p id="desc">1 USD = {addcurr} {exchangeRate}</p><br></br>
+          </td>
+          <td><input type="text" value={exchangeVal} readOnly></input></td>
+          <td><input type="button" onClick={this.handleRemoveRow.bind(this, addcurr)} value="(-)"/></td>
+        </tr>
+      );
+    /*
+     let r = "<tr id=" + addcurr +"><td>";
+     r += addcurr;
+     r += "<br>";
+     r = r + "<p id='desc'>" + addcurr + "-" + currencyKey[addcurr] + "</p><br>";
+     r = r + "<p id='desc'>1 USD = " + addcurr + " " + exchangeRate + "</p><br>";
+     r += "</td>";
+     r = r + "<td><input type='text' value=" + exchangeVal + " readOnly></input></td>";
+     r = r + "<td><input type='button' value='(-)' id='delete'/></td>";
+     r += "</tr>";
+     document.getElementById("mytable").getElementsByTagName("tbody")[0].innerHTML += r;
+     document.getElementById("delete").onClick = handleRemoveRow(addcurr);
+     */
+     document.getElementById("addCurrency").value = "";
+    }  else{
+      alert("Not found " + addcurr);
+    }  
+  };
+
+  handleAddRow = (event) => {
 
   };
 
@@ -66,19 +119,15 @@ class App extends Component {
     const mystate = this.state;
     let ratesArr = Object.keys(mystate).map(i => mystate[i])[2];
     let currencyKey = Object.keys(mystate).map(i => mystate[i])[3];
-    let table = [];
-    let children = [];
     let displayedCurrencies = ["CAD", "IDR", "GBP", "CHF", "SGD", "INR", "MYR", "JPY", "KRW"];
-
+    let children = [];
     // The following loop is used to create inner structure (children) of the table.
     for (var key in ratesArr) {
       if (ratesArr.hasOwnProperty(key) && displayedCurrencies.includes(key) && currencyKey.hasOwnProperty(key)) {
         let exchangeRate = ratesArr[key].toLocaleString(undefined, {maximumFractionDigits:2, minimumFractionDigits:2});
         let exchangeVal = (this.state.value * ratesArr[key]).toLocaleString(undefined, {maximumFractionDigits:2, minimumFractionDigits:2});
         children.push(
-          <table className="ListTable" id={key}>
-            <tbody>
-            <tr>
+            <tr id={key}>
               <td>
                 {key}<br></br>
                 <p id="desc">{key}-{currencyKey[key]}</p><br></br>
@@ -87,23 +136,10 @@ class App extends Component {
               <td><input type="text" value={exchangeVal} readOnly></input></td>
               <td><input type="button" onClick={this.handleRemoveRow.bind(this, key)} value="(-)"/></td>
             </tr>
-            </tbody>
-          </table>
         );
       }
     }
-    children.push(
-      <table className="ListTable">
-        <tbody>
-          <tr>
-            <td colSpan="3"><input type="button" onClick={this.handleAddRow.bind(this)} value="(+) Add More Currencies"/></td>
-          </tr>
-        </tbody>
-      </table>
-    )
-    table.push(<td colSpan="2">{children}</td>);
-
-    return table;
+    this.state.tables.push(<table className="ListTable"><tbody>{children}</tbody></table>);
   };
 
   render() {
@@ -113,6 +149,7 @@ class App extends Component {
     } else if (!isLoaded) {
       return <div>Loading...</div>;
     } else {
+      this.createTable();
       return (
         <main>
           <div className="App-body">
@@ -125,7 +162,28 @@ class App extends Component {
               </thead>
               <tbody>
                 <tr>
-                  {this.createTable()}
+                  <td colSpan="2">
+                    {this.state.tables[1]}
+                    <table className="ListTable" id="mytable">
+                      <tbody>
+                      </tbody>
+                    </table>
+                    <table className="ListTable">
+                      <tbody>
+                        <tr>
+                          <td colSpan="3" id="afterclick">
+                            <input type="text" id="addCurrency" placeholder="Type here.."></input>
+                            <input type="button" id="submitbutton" onClick={this.addNewRow.bind(this)} value="Submit"/>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colSpan="3" id="beforeclick">
+                            <input type="button" onClick={this.handleAddRow.bind(this)} value="(+) Add More Currencies"/>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
                 </tr>
               </tbody>
             </table>
