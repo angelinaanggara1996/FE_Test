@@ -1,0 +1,112 @@
+.App-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+}
+
+.table,
+th,
+td {
+  border: none;
+}
+
+.currencyTable {
+  width: 50%;
+  background-color: #090c1f;
+  border-collapse: collapse;
+  font-size: 20px;
+  border-radius: 15px;
+  -moz-border-radius: 15px;
+  overflow: hidden;
+  color: blueviolet;
+}
+
+.currencyTable td {
+  padding: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.currencyTable th {
+  padding: 20px;
+  color: white;
+  border-bottom: 2px solid white;
+}
+
+.currencyTable {
+  width: 50%;
+  background-color: #090c1f;
+  border-collapse: collapse;
+  font-size: 20px;
+  border-radius: 15px;
+  -moz-border-radius: 15px;
+  overflow: hidden;
+  color: blueviolet;
+}
+
+.currencyTable td {
+  padding: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.currencyTable th {
+  padding: 20px;
+  color: white;
+  border-bottom: 2px solid white;
+}
+
+.ListTable {
+  width: 100%;
+  background-color: #090c1f;
+  font-size: 20px;
+  border-radius: 10px;
+  -moz-border-radius: 15px;
+  overflow: hidden;
+  color: blueviolet;
+}
+
+.ListTable td {
+  padding: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.ListTable tr {
+  padding: 20px;
+  color: white;
+  border-bottom: 2px solid white;
+}
+
+p {
+  text-align: left;
+  font-weight: 300;
+  line-height: 24px;
+}
+
+p a {
+  font-weight: 500;
+  color: white;
+}
+
+input[type=text] {
+  background-color: #090c1f;
+  border: none;
+  padding: 15px 20px;
+  color: white;
+  font-size: 20px;
+  text-align: right;
+  float: right;
+}
+
+input[type=button]{
+  background-color: black;
+  color: white;
+  height: 100%;
+  width: 100%;
+}
+
+#desc{
+  font-size: 12px;
+  display: inline;
+}
