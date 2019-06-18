@@ -111,16 +111,6 @@ input[type=button]{
   display: inline;
 }
 
-#addCurrency{
-  background-color: #090c1f;
-  padding: 15px 20px;
-  color: white;
-  font-size: 20px;
-  text-align: left;
-  float: left;
-  text-transform: uppercase;
-}
-
 #submitbutton{
   background-color: black;
   color: white;

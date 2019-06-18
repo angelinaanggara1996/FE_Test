@@ -1,5 +1,9 @@
 import React, { Component } from "react";
+import Select from 'react-select';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
+
+const options = [];
 
 class App extends Component {
   constructor(props) {
@@ -11,7 +15,8 @@ class App extends Component {
       currencies: {},
       keys: [],
       value: "10.0000",
-      addCurr: false
+      addCurr: false,
+      selectedOption: "IDR",
     };
   }
 
@@ -21,6 +26,12 @@ class App extends Component {
       .then(res => res.json()) // Short typo for response.
       .then(
         result => {
+          for(var key in result.rates){
+            options.push({
+              value: key,
+              label: key
+            });
+          }
           this.setState({
             isLoaded: true,
             rates: result.rates
@@ -91,7 +102,6 @@ class App extends Component {
     table.push(<table className="ListTable">
       <tbody>{children}</tbody>
     </table>);
-    console.log({table});
 
     var tbl = Object.keys(table);
     return tbl.map(i => {
@@ -102,7 +112,7 @@ class App extends Component {
   //Add new row
   addNewRow = () => {
     this.setState({addCurr: false});
-    let addcurr = document.getElementById("addCurrency").value.trim().toUpperCase();
+    let addcurr = this.state.selectedOption.value;
     if (addcurr === ""){
       alert("please input new currency value");
     } else {
@@ -124,8 +134,7 @@ class App extends Component {
       this.setState({
         keys: this.state.keys
       });
-     document.getElementById("addCurrency").value = "";
-    }  else{
+    } else{
       alert("Not found " + addcurr);
     }
   };
@@ -141,6 +150,11 @@ class App extends Component {
 
   handleChange = (event) => {
     this.setState({value: event.target.value});
+  };
+
+  handleOptsChange = selectedOption => {
+    this.setState({ selectedOption });
+    console.log(`Option selected:`, selectedOption);
   };
 
   defaultTable = () => {
@@ -180,7 +194,7 @@ class App extends Component {
   };
 
   render() {
-    const { error, isLoaded } = this.state;
+    const { error, isLoaded, selectedOption } = this.state;
     if (error) {
       return <div>Oops: {error.message}</div>;
     } else if (!isLoaded) {
@@ -205,18 +219,13 @@ class App extends Component {
                       <tbody>
                       </tbody>
                     </table>
-                    <table className="ListTable">
-                      <tbody>
-                          <tr>
-                            <td colSpan="3">
-                              {this.state.addCurr ? <div><input type="text" id="addCurrency" placeholder="Type here.."></input>
-                                    <input type = "button" id="submitbutton" onClick={this.addNewRow.bind(this)} value="Submit"/></div>
-                                :  <input type="button" onClick={this.handleAddRow.bind(this)} value="(+) Add More Currencies"/>
-                              }
-                            </td>
-                          </tr>
-                      </tbody>
-                    </table>
+                      {this.state.addCurr ?
+                          <div style={{minHeight: '350px'}}>
+                            <Select value={selectedOption} onChange={this.handleOptsChange.bind(this)} options={options} placeholder="Target Currency"/>
+                            <input type = "button" id="submitbutton" onClick={this.addNewRow.bind(this)} value="Submit"/>
+                          </div>
+                          :  <input type="button" onClick={this.handleAddRow.bind(this)} value="(+) Add More Currencies"/>
+                      }
                   </td>
                 </tr>
               </tbody>
