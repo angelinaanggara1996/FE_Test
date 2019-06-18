@@ -8,5 +8,6 @@ heroku open
 
 **Using npm**
 ```
+npm install
 npm run-script start
 ```
